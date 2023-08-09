@@ -42,6 +42,24 @@ describe('API Pact test', () => {
           },
           body: like(expectedProduct)
         });
+      
+      mockProvider
+        .given('a product with ID 99 exists')
+        .uponReceiving('a request to get a product')
+        .withRequest({
+          method: 'GET',
+          path: '/product/99',
+          headers: {
+            Authorization: like('Bearer 2019-01-14T11:34:18.045Z')
+          }
+        })
+        .willRespondWith({
+          status: 200,
+          headers: {
+            'Content-Type': 'application/json; charset=utf-8'
+          },
+          body: like(expectedProduct)
+        });
       return mockProvider.executeTest(async (mockserver) => {
         // Act
         const api = new API(mockserver.url);
